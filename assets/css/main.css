@@ -1,0 +1,60 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"); */
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+[role="alert"]{
+  font-size: 0.75em;
+  color: rgb(156, 0, 0);
+}
+
+@theme{
+  /* --font-sans: "Noto Sans Thai"; */
+
+  --ui-color-primary-50: var(--color-blue-50);
+  --ui-color-primary-100: var(--color-blue-100);
+  --ui-color-primary-200: var(--color-blue-200);
+  --ui-color-primary-300: var(--color-blue-300);
+  --ui-color-primary-400: var(--color-blue-400);
+  --ui-color-primary-500: var(--color-blue-500);
+  --ui-color-primary-600: var(--color-blue-600);
+  --ui-color-primary-700: var(--color-blue-700);
+  --ui-color-primary-800: var(--color-blue-800);
+  --ui-color-primary-900: var(--color-blue-900);
+  --ui-color-primary-950: var(--color-blue-950);
+
+  --ui-primary: var(--color-green-500);
+}
+
+button
+{
+  @apply cursor-pointer;
+}
+
+input{
+  @apply dark:text-black text-black;
+}
+
+input:-webkit-autofill{
+  background-color: white !important;
+  -webkit-text-fill-color: black !important;
+  color: black !important;
+}
+input:-webkit-autofill:focus{
+  background-color: white !important;
+  -webkit-text-fill-color: black !important;
+  color: black !important;
+}
+
+input:-webkit-autofill::first-line{
+  -webkit-text-fill-color: black !important;
+  color: black !important;
+}
+input:-internal-autofill-selected {
+  background-color: white !important;
+  -webkit-text-fill-color: black !important;
+  color: black !important;
+}
+
+button:disabled{
+  cursor: not-allowed !important;
+}
