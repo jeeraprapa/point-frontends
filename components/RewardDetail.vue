@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router';
 import { useRewardStore } from '~/store/reward';
 import { CalendarIcon, CurrencyDollarIcon } from '@heroicons/vue/24/outline';
 import { formatShortDate } from '~/utils/helper';
+
 interface Reward {
   id: number;
   title: string;
@@ -30,22 +31,34 @@ onMounted(() => {
   id.value = Number(route.params.id);
   (rewardStore.getRewardById(id.value) as Promise<Response>).then((data: Response) => {
     reward.value = data.reward;
+    items.value = [
+      {
+        label: 'Home',
+        icon: 'i-lucide-house',
+        to: '/',
+      },
+      {
+        label: 'Reward',
+        icon: 'i-lucide-gift',
+        to: '/reward',
+      },
+      {
+        label: reward.value.title,
+      },
+  ];
   });
-
 });
 
 const redeem = (reward: Reward) => {
   rewardStore.redeemReward(reward.id);
 };
-
+const items = ref([])
 </script>
 
 <template>
 
-  <div class="flex justify-end">
-    <UButton class="mt-4 text-xl" to="/reward" color="neutral">
-      Back
-    </UButton>
+  <div class="flex justify-start">
+    <UBreadcrumb :items="items" />
   </div>
   <h1 class="text-3xl font-bold text-center py-10">
     {{ reward.title }}

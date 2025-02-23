@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { API_URL } from '~/utils/constant';
 
-axios.defaults.baseURL = API_URL;
-axios.defaults.withCredentials = true; // Ensure cookies are sent
+axios.defaults.withCredentials = true;
 
 export const useApi = async (
   url: string,
@@ -11,13 +10,20 @@ export const useApi = async (
 ) => {
   const token = localStorage.getItem('authToken');
 
+  const config = useRuntimeConfig();
+  axios.defaults.baseURL = config.public.apiBase || API_URL;
+
   try {
-    await axios.get('/sanctum/csrf-cookie');
+    await axios({
+      url: '/sanctum/csrf-cookie',
+      method: 'GET',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
 
     const response = await axios({
       url,
       method,
-      data: body ? JSON.stringify(body) : null,
+      data: body ?? null,
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
 

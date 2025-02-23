@@ -3,7 +3,7 @@
     <div class="p-24 md:order-1 hidden md:block">
       <img
         class="rounded-full transition-transform transform hover:scale-125"
-        src="~/assets/img/hero.jpg"
+        src="https://www.ais.th/content/dam/ais/business/content/enterprise/product/ais-reward-platform/img_AIS-Reward-Platform.png"
         alt="Starship starts the engine"
         loading="eager"
         format="avif"

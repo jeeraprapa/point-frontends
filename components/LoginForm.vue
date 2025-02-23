@@ -33,6 +33,9 @@ import { Field } from 'vee-validate';
 
 const userStore = useUserStore();
 
+const { user } = storeToRefs(userStore);
+
+
 const email = ref('');
 const password = ref('');
 
@@ -46,6 +49,12 @@ const { handleSubmit } = useForm({ validationSchema });
 const submitForm = handleSubmit(async () => {
   await userStore.login(email.value, password.value);
   
+})
+
+onMounted(() => {
+  if(userStore.isAuth) {
+    navigateTo('/profile');
+  }
 })
 </script>
 

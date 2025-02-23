@@ -3,19 +3,12 @@ import { useUserStore } from "@/store/user";
 export default defineNuxtRouteMiddleware(to =>{
   const authStore = useUserStore();
   authStore.checkAuth();
-  const { user } = storeToRefs(authStore);
+  const { user,isAuth } = storeToRefs(authStore);
 
-  if (!user) {
+  if (!isAuth) {
+    alert("You need to login first");
     authStore.logout();
-    return '/';
+    navigateTo("/login");
   }
 
-  if (to.meta.requiresAdmin && user.value.role !== "admin") {
-    return navigateTo("/unauthorized");
-  }
-
-  // 🔥 ตรวจสอบเฉพาะเส้นทาง /admin/*
-  if (to.path.startsWith("/admin") && user.value.role !== "admin") {
-    return navigateTo("/unauthorized"); // ไปหน้าห้ามเข้า
-  }
 });

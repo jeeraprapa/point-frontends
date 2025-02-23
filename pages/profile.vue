@@ -1,39 +1,53 @@
 <script setup lang="ts">
-import { AppLink } from '#components';
 import { useUserStore } from '~/store/user';
 import { formatDate, formatShortDate, timeFromNow } from "~/utils/helper";
 import { onUnmounted } from 'vue';
+import {CurrencyDollarIcon} from '@heroicons/vue/24/outline';
 
 const userStore = useUserStore();
-const { user } = storeToRefs(userStore);
+const { user,isAuth } = storeToRefs(userStore);
 
 interface History {
   id: number;
-  rentDate: Date;
-  returnDate: Date;
-  returnedAt: Date;
-  isReturned: boolean;
-  isLate: boolean;
-  book: {
+  redeemed_at: Date;
+  status: string;
+  reward: {
+    id: number;
     title: string;
+    points: number,
+    image: string;
+    start_date: Date,
+    expiry_date: Date,
+    is_active: boolean
   };
 }
 
-//get history rent data
+interface Resonse {
+  status: boolean,
+  user_rewards: History[];
+}
+
+//get history data
 const history = ref([]) as Ref<History[]>;
 
 onMounted(async () => {
-  history.value = await userStore.getUserHistory();
+  if(!isAuth.value){
+    navigateTo('/login');
+  }
+
+  const response = await userStore.getUserHistory();
+
+  if (response.success) {
+    history.value = response.user_rewards;
+  }
 });
 
 definePageMeta({
-  middleware: ["auth"]
-  // or middleware: 'auth'
+  middleware: 'auth'
 })
 
 onUnmounted(() => {
   history.value = [];
-  userStore.reset();
 });
 </script>
 
@@ -41,12 +55,15 @@ onUnmounted(() => {
   <div>
     <AppContainer>
       <h1 class="text-3xl font-bold text-center py-10">
-        Profile
+        ยินดีต้อนรับคุณ {{ user?.name }}
       </h1>
       <div class="flex items-center justify-center">
 
-        <p>
-          Welcome, {{ user?.name }}
+        <p class="rounded-lg bg-gray-500 p-4 text-center">
+         คุณมีคะแนนสะสมทั้งหมด 
+         <CurrencyDollarIcon class="w-6 h-6 inline-block text-yellow-200" />
+         <span class="text-green-500">{{ user?.point }} </span>
+         คะแนน
         </p>
 
       </div>
@@ -55,31 +72,25 @@ onUnmounted(() => {
       <div class="mt-10">
         <div class="flex justify-between items-center">
           <h2 class="text-2xl font-bold my-4">
-          ประวัติการยืม-คืน
+          ประวัติการแลกรับสิทธิ์
           </h2>
-          <AppLink href="/return-book" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            คืนหนังสือ
-          </AppLink>
         </div>
         <div class="w-full mx-auto border rounded-lg overflow-hidden shadow-lg">
           <!-- หัวตาราง -->
           <div class="bg-gray-800 text-white flex">
-            <div class="w-1/10 p-2 text-center">
+            <div class="w-1/8 p-2 text-center">
               #
             </div>
-            <div class="w-2/10 p-2 text-center">
-              Book
+            <div class="w-2/8 p-2 text-center">
+              รายการ
             </div>
-            <div class="w-2/10 p-2 text-center">
-              วันที่ยืม
+            <div class="w-2/8 p-2 text-center">
+              วันที่แลกรับสิทธิ์
             </div>
-            <div class="w-2/10 p-2 text-center">
-              กำหนดคืน
+            <div class="w-2/8 p-2 text-center">
+              คะแนน
             </div>
-            <div class="w-2/10 p-2 text-center">
-              วันที่คืน
-            </div>
-            <div class="w-1/10 p-2 text-center">
+            <div class="w-1/8 p-2 text-center">
               สถานะ
             </div>
           </div>
@@ -88,15 +99,12 @@ onUnmounted(() => {
           <div class="flex flex-col">
             <div v-for="(item, index) in history" :key="item.id" class="flex p-2 text-center dark:text-gray-600"
               :class="index % 2 === 0 ? 'bg-gray-200' : 'bg-gray-100'">
-              <div class="w-1/10">{{ item.id }}</div>
-              <div class="w-2/10">{{ item.book.title }}</div>
-              <div class="w-2/10">{{ item.rentDate ? formatShortDate(item.rentDate) : "" }}</div>
-              <div class="w-2/10">{{ item.returnDate  ? formatShortDate(item.returnDate) : "" }}</div>
-              <div class="w-2/10">{{ item.returnedAt ? formatShortDate(item.returnedAt) : "" }}</div>
-              <div class="w-1/10">
-                <span v-if="item.isLate" class="text-red-500">เกินกำหนด</span>
-                <span v-else-if="item.isReturned" class="text-green-500">คืนแล้ว</span>
-                <span v-else class="text-yellow-500">ยังไม่คืน</span>
+              <div class="w-1/8">{{ item.id }}</div>
+              <div class="w-2/8">{{ item.reward.title }}</div>
+              <div class="w-2/8">{{ item.reward.start_date ? formatShortDate(item.reward.start_date) : "" }}</div>
+              <div class="w-2/8">{{ item.reward.points }}</div>
+              <div class="w-1/8">
+                {{ item.status }}
               </div>
             </div>
             <div>

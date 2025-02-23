@@ -1,26 +1,30 @@
 <script setup lang="ts">
-const links = [{
-  label: 'Profile',
-  avatar: {
-    src: 'https://avatars.githubusercontent.com/u/739984?v=4'
+const items = [
+  {
+    label: 'Hone',
+    icon: 'i-lucide-home',
+    to: '/'
   },
-  badge: 100
-}, {
-  label: 'Installation',
-  icon: 'i-heroicons-home',
-  to: '/getting-started/installation'
-}, {
-  label: 'Horizontal Navigation',
-  icon: 'i-heroicons-chart-bar',
-  to: '/components/horizontal-navigation'
-}, {
-  label: 'Command Palette',
-  icon: 'i-heroicons-command-line',
-  to: '/components/command-palette'
-}]
+  {
+    label: 'Reward',
+    icon: 'i-lucide-gift',
+    to:'/reward'
+  },
+  {
+    label: 'Profile',
+    icon: 'i-lucide-user',
+    to: '/profile'
+  }
+]
 </script>
 
 <template>
-  <UHorizontalNavigation :links="links" class="border-b border-gray-200 dark:border-gray-800" />
+  <div class="fixed bottom-0 w-full">
+    <UNavigationMenu 
+    color="primary"
+    :items="items" 
+    class="w-full justify-center bg-white dark:bg-gray-800">
+    </UNavigationMenu>
+  </div>
 </template>
 

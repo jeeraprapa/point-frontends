@@ -5,6 +5,8 @@ import { CalendarIcon } from '@heroicons/vue/24/outline';
 import { API_URL } from '~/utils/constant';
 import { RewardList } from '#components';
 import { formatShortDate } from "~/utils/helper";
+import { useUserStore } from '~/store/user';
+import { useApi } from "#imports";
 
 
 const addrewardToCart = (reward: Reward) => {
@@ -63,11 +65,8 @@ const fecthReward = async () => {
   error.value = null;
 
   try {
-    const data: RewardList = await $fetch(`${API_URL}/api/rewards/list`, {
-      query: { page: currentPage.value },
-      watch: ['page'],
-    });
 
+    const data = await useApi(`/api/rewards/list?page=${currentPage.value}`);
 
     rewards.value = data.rewards.data || [];
 

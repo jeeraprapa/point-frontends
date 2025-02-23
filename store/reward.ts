@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from 'vue'
-import { API_URL } from '~/utils/constant';
+import { useApi } from "#imports";
 
 interface Reward {
   id: number;
@@ -15,25 +15,20 @@ interface Reward {
 
 export const useRewardStore = defineStore("rewardStore",{
   state: () => ({
-    books: ref<Reward[]>([]),
+    rewards: ref<Reward[]>([]),
   }),
   getters: {
-    totalBooks(): number {
-      return this.books.length;
+    totalReward(): number {
+      return this.rewards.length;
     },
   },
   actions: {
     async getRewards() {``
       // Call your API here
-      const response = await fetch(`${API_URL}/api/rewards/list`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await useApi("/api/rewards/list", "GET");
 
       const data = await response.json();
-      this.books = data.books;
+      this.rewards = data.rewards;
 
     },
     async getRewardById(id: number) {

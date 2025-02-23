@@ -1,8 +1,7 @@
 <script setup>
 import { AppLink } from '#components';
 import { useUserStore } from '@/store/user';
-import { ShoppingCartIcon,UserIcon } from '@heroicons/vue/24/outline';
-import { useCartStore } from '~/store/cart';
+import { ShoppingCartIcon,UserIcon, CurrencyDollarIcon } from '@heroicons/vue/24/outline';
 import Swal from 'sweetalert2';
 
 const menuitems = [
@@ -10,13 +9,9 @@ const menuitems = [
   { title: 'Rewards', path: '/reward' },
 ];
 
-const adminMenuItems = [
-  { title: 'Admin', path: '/admin' },
-];
-
 const userStore = useUserStore();
 
-const { user,isAuth,authToken } = storeToRefs(userStore);
+const { user } = storeToRefs(userStore);
 
 const open = ref(false);
 
@@ -32,13 +27,17 @@ const logout = async () => {
   });
 };
 
+onMounted(() => {
+  userStore.checkAuth();
+});
+
 </script>
 
 <template>
   <AppContainer>
     <header class="flex flex-col lg:flex-row justify-between items-center my-5">
       <div class="flex w-full lg:w-auto items-center justify-between">
-        <AppLink href="/" :class="text-lg">
+        <AppLink href="/">
           <span class="font-bold text-slate-800 dark:text-white">Point</span
           ><span class="text-slate-500 dark:text-green-500">
             Reward
@@ -79,11 +78,6 @@ const logout = async () => {
               {{ item.title }}
             </AppLink>
           </li>
-          <li v-if="userStore.isAuth && userStore.user.role == 'admin'" v-for="item of adminMenuItems">
-            <AppLink :href="item.path" size="md" block class="flex lg:px-3 py-2 text-gray-600 hover:text-gray-900  dark:text-gray-300 dark:hover:text-white">
-              {{ item.title }}
-            </AppLink>
-          </li>
         </ul>
         <div class="lg:hidden flex items-center mt-3 gap-4">
           <AppLink href="/login" styleName="muted" block size="md"
@@ -110,9 +104,11 @@ const logout = async () => {
             Sign up
           </AppLink>
           <AppLink href="/profile" size="md" block v-if="userStore.isAuth">
-
-            <UserIcon class="w-6 h-6 dark:text-white" />
-            
+            <UserIcon class="w-6 h-6 dark:text-white inline mr-2" /> 
+            <div class="inline rounded-full py-2 px-4 bg-gray-200 dark:bg-gray-800">
+              <CurrencyDollarIcon class="w-4 h-4 dark:text-yellow-200 inline mr-1" />
+            <span class="text-green-500">{{ user?.point }}</span> 
+            </div>
           </AppLink>
           <AppLink href="#" @click="logout" size="md" block v-if="userStore.isAuth">
             Log out

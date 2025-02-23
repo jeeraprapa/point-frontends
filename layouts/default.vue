@@ -1,16 +1,15 @@
 <template>
-  <KeepAlive>
-    <AppNavbar></AppNavbar>
-  </KeepAlive>
-  
-  <div class="container mx-auto">
-    <slot></slot>
-  </div>
 
+  <AppNavbar></AppNavbar>
+  <client-only>
+    <div class="container mx-auto pb-25">
+      <slot></slot>
+    </div>
+  </client-only>
   <AppNavigation></AppNavigation>
+
+
 </template>
 
 
-<style scoped>
-
-</style>
+<style scoped></style>
