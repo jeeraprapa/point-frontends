@@ -3,6 +3,7 @@
 <template>
   <AppContainer>
     <AppHero></AppHero>
+    <RewardCarousel></RewardCarousel>
   </AppContainer>
 </template>
 

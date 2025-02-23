@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const items = [
   {
-    label: 'Hone',
+    label: 'Home',
     icon: 'i-lucide-home',
     to: '/'
   },
