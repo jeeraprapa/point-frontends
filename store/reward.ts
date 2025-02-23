@@ -38,10 +38,13 @@ export const useRewardStore = defineStore("rewardStore",{
       return response;
     },
     async redeemReward(id: number) {
-      // Call your API here
-      // const response = await useApi(`/api/rewards/${id}/redeem`, "POST");
 
-      // return response;
+      // Call your API here
+      const response = await useApi('/api/rewards/redeem', "POST",{
+        reward_id: id
+      });
+
+      return response;
     },
   },
   persist: true

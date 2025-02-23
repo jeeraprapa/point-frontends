@@ -19,7 +19,7 @@ const items = [
 </script>
 
 <template>
-  <div class="fixed bottom-0 w-full">
+  <div class="fixed bottom-0 w-full z-50">
     <UNavigationMenu 
     color="primary"
     :items="items" 

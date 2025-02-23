@@ -101,7 +101,7 @@ onUnmounted(() => {
               :class="index % 2 === 0 ? 'bg-gray-200' : 'bg-gray-100'">
               <div class="w-1/8">{{ item.id }}</div>
               <div class="w-2/8">{{ item.reward.title }}</div>
-              <div class="w-2/8">{{ item.reward.start_date ? formatShortDate(item.reward.start_date) : "" }}</div>
+              <div class="w-2/8">{{ item.redeemed_at ? formatDate(item.redeemed_at) : "" }}</div>
               <div class="w-2/8">{{ item.reward.points }}</div>
               <div class="w-1/8">
                 {{ item.status }}

@@ -48,6 +48,7 @@ const validationSchema = yup.object({
 const userStore = useUserStore();
 const { handleSubmit } = useForm({ validationSchema });
 
+
 const name = ref('');
 const email = ref('');
 const password = ref('');
@@ -56,12 +57,12 @@ const submitForm = handleSubmit(async () => {
  try {
    const data = await userStore.signup(name.value, email.value, password.value);
 
-    if(!data.errors){
+    if(data.success){
       Swal.fire({
         title: 'Success!',
         text: 'You have successfully signed up!',
         icon: 'success',
-        confirmButtonText: 'Cool'
+        confirmButtonText: 'Close'
       })
       navigateTo('/login');
     }else{
@@ -69,7 +70,7 @@ const submitForm = handleSubmit(async () => {
         title: 'Error!',
         text: data.message,
         icon: 'error',
-        confirmButtonText: 'Cool'
+        confirmButtonText: 'Close'
       })
     }
   } catch (error) {
@@ -78,7 +79,7 @@ const submitForm = handleSubmit(async () => {
       title: 'Error!',
       text: (error as any).response.data.message,
       icon: 'error',
-      confirmButtonText: 'Cool'
+      confirmButtonText: 'Close'
   })
   }
 })

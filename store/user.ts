@@ -28,14 +28,13 @@ export const useUserStore = defineStore("user",{
     },
     async signup(name: string, email: string, password: string) {
       // Call your API here
-      const response = await useApi("/api/auth/signup", "POST", {
+      const response = await useApi("/api/register", "POST", {
         name,
         email,
         password,
       });
 
-      const data = await response.json();
-     return data;
+     return response;
     },
     async login(email: string, password: string) {
       // Call your API here
@@ -44,7 +43,7 @@ export const useUserStore = defineStore("user",{
         password,
       });
 
-      if (data.errors) {
+      if (!data.success) {
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -118,6 +117,9 @@ export const useUserStore = defineStore("user",{
       
       await this.checkAuth();
       return data;
+    },
+    async sanctum(){
+      await useApi("/sanctum/csrf-cookie", "GET");
     }
   },
   persist: true,

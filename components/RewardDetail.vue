@@ -5,6 +5,8 @@ import { useRoute } from 'vue-router';
 import { useRewardStore } from '~/store/reward';
 import { CalendarIcon, CurrencyDollarIcon } from '@heroicons/vue/24/outline';
 import { formatShortDate } from '~/utils/helper';
+import { useUserStore } from '~/store/user';
+import Swal from 'sweetalert2';
 
 interface Reward {
   id: number;
@@ -21,6 +23,9 @@ interface Response {
   success: boolean;
   reward: Reward;
 }
+
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
 
 const id = ref(0);
 const rewardStore = useRewardStore();
@@ -49,9 +54,41 @@ onMounted(() => {
   });
 });
 
-const redeem = (reward: Reward) => {
-  rewardStore.redeemReward(reward.id);
+const redeem = async (reward: Reward) => {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'You want to redeem this reward?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes',
+    cancelButtonText: 'No',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      redeemReward(reward);
+    }
+  });
 };
+
+async function redeemReward(reward: Reward) {
+  const response = await rewardStore.redeemReward(reward.id);
+  if(response.success) {
+    Swal.fire({
+      title: 'Success',
+      text: 'You have successfully redeemed the reward',
+      icon: 'success',
+      confirmButtonText: 'OK',
+    });
+    navigateTo('/profile');
+  }else{
+    Swal.fire({
+      title: 'Error',
+      text: 'You do not have enough points to redeem this reward',
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
+  }
+}
+
 const items = ref([])
 </script>
 
@@ -90,7 +127,7 @@ const items = ref([])
           </div>
           <div class="col-12">
             <UButton class="mt-4 text-xl text-white px-5 py-2"  @click="redeem(reward)" 
-            :disabled="!reward.is_redeemable">
+            :disabled="!reward.is_redeemable || reward.points > user.point">
               แลกรับสิทธิ์
             </UButton>
           </div>

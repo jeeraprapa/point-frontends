@@ -117,4 +117,6 @@ onMounted(() => {
       </div>
     </header>
   </AppContainer>
+  
+  <AppNavigation v-if="userStore.isAuth"></AppNavigation>
 </template>

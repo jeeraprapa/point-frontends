@@ -6,9 +6,6 @@
       <slot></slot>
     </div>
   </client-only>
-  <AppNavigation></AppNavigation>
-
-
 </template>
 
 
