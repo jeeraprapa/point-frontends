@@ -28,7 +28,7 @@ export default defineNuxtConfig({
     '@nuxt/ui'
   ],
   plugins: [
-    '~/plugins/auth.ts'
-  ]
+    '~/plugins/axios',
+  ],
 })
 

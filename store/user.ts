@@ -43,6 +43,8 @@ export const useUserStore = defineStore("user",{
         password,
       });
 
+      
+
       if (!data.success) {
         Swal.fire({
           icon: 'error',
@@ -84,14 +86,8 @@ export const useUserStore = defineStore("user",{
       if (process.client) {
         const token = localStorage.getItem("authToken");
         if (token) {
-          const response = await fetch(`${API_URL}/api/auth/check-auth`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          const data = await response.json();
+          const response = await useApi("/api/auth/check-auth", "GET");
+          const data = await response;
           if (data.success === false) {
           
             localStorage.removeItem("authToken");
